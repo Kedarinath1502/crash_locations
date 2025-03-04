@@ -1,0 +1,11 @@
+streamlit
+pandas
+numpy
+matplotlib
+seaborn
+folium
+streamlit_folium
+google-cloud-bigquery
+google-auth
+pandas-gbq
+pyarrow
