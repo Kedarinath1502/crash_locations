@@ -10,17 +10,17 @@ from google.oauth2 import service_account
 import json
 
 # Load secrets from Streamlit Cloud
-credentials_info = json.loads(st.secrets["gcp_service_account"])
-credentials = service_account.Credentials.from_service_account_info(credentials_info)
+try:
+    service_account_info = st.secrets["gcp_service_account"]
+    credentials = service_account.Credentials.from_service_account_info(service_account_info)
+    client = bigquery.Client(credentials=credentials, project=service_account_info["project_id"])
+    st.write("Successfully connected to BigQuery!")
+except Exception as e:
+    st.error(f"Error loading Google Cloud credentials: {e}")
 
 @st.cache_data
 def load_data():
-    project_id = credentials_info["project_id"]
-    dataset_id = "crash_analysis"
-    table_id = "processed_crash_data"
-    client = bigquery.Client(credentials=credentials, project=project_id)
-
-    query = f"SELECT * FROM `{project_id}.{dataset_id}.{table_id}`"
+    query = f"SELECT * FROM `{service_account_info['project_id']}.crash_analysis.processed_crash_data`"
     df = client.query(query).to_dataframe()
     return df
 
