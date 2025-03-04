@@ -5,13 +5,12 @@ from folium.plugins import HeatMap
 import matplotlib.pyplot as plt
 import seaborn as sns
 from streamlit_folium import folium_static
-import toml
 from google.cloud import bigquery
 from google.oauth2 import service_account
+import json
 
-# Load credentials from secrets.toml
-config = toml.load("secrets.toml")
-credentials_info = config["gcp_service_account"]
+# Load secrets from Streamlit Cloud
+credentials_info = json.loads(st.secrets["gcp_service_account"])
 credentials = service_account.Credentials.from_service_account_info(credentials_info)
 
 @st.cache_data
